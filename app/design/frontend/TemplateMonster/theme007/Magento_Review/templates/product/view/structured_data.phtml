@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var Magento\Review\Block\Product\View\ListView $block */
+
+$_items = $block->getReviewsCollection()->getItems();
+$format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+?>
+<?php if (count($_items)):?>
+    <?php foreach ($_items as $_review):?>
+        <span class="no-display" itemscope itemprop="review" itemtype="http://schema.org/Review">
+            <meta itemprop="name" content="<?= $block->escapeHtml($_review->getTitle()) ?>"/>
+            <meta itemprop="description" content="<?= nl2br($block->escapeHtml($_review->getDetail())) ?>"/>
+            <meta itemprop="author" content="<?= $block->escapeHtml($_review->getNickname()) ?>"/>
+            <meta itemprop="datePublished" content="<?= $block->escapeHtmlAttr($block->formatDate($_review->getCreatedAt(), $format)) ?>"/>
+            <?php if (count($_review->getRatingVotes())): ?>
+                <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                    <span itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                        <meta itemprop="worstRating" content="1"/>
+                        <meta itemprop="bestRating" content="100"/>
+                        <meta itemprop="ratingValue" content="<?= $block->escapeHtml($_vote->getPercent()) ?>" />
+                    </span>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </span>
+    <?php endforeach; ?>
+<?php endif;?>

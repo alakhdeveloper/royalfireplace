@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Product price wrapper template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View
+ */
+?>
+
+<?php
+$product = $block->getProduct();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$currency = $objectManager->get('Magento\Framework\Pricing\PriceCurrencyInterface');
+?>
+<meta itemprop="mpn" content="<?= /* @escapeNotVerified */ $product->getSku() ?>" />
+<span class="no-display" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+    <meta itemprop="price" content="<?= /* @escapeNotVerified */ $product->getFinalPrice() ?>" />
+    <meta itemprop="priceCurrency" content="<?= /* @escapeNotVerified */ $currency->getCurrency()->getCurrencyCode() ?>" />
+    <meta itemprop="availability" content="<?= /* @escapeNotVerified */ $product->isAvailable() ? 'InStock' : 'OutOfStock' ?>" />
+    <meta itemprop="priceValidUntil" content="<?= /* @escapeNotVerified */ $product->getSpecialToDate() ? $product->getSpecialToDate() : '' ?>" />
+    <meta itemprop="url" content="<?= /* @escapeNotVerified */ $product->getProductUrl() ?>" />
+</span>
